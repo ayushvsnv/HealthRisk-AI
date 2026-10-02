@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HealthRisk AI — Advanced Clinical Dashboard</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <nav class="navbar">
+        <div class="brand">
+            ⚡ HealthRisk AI
+        </div>
+        <div class="nav-links">
+            <a href="assessment.html" class="active">Assessment</a>
+            <a href="history.html">Patient History</a>
+        </div>
+    </nav>
+
+    <div class="main-container">
+        <div class="hero-section">
+            <h1>AI Health Risk Screening</h1>
+            <p>Predictive Machine Learning Evaluation for Cardiovascular Health</p>
+        </div>
+
+        <div class="glass-card">
+            <form id="assessmentForm">
+                
+                <!-- Section 1 -->
+                <div class="section-label">👤 Patient Demographics & Biometrics</div>
+                <div class="grid-3">
+                    <div class="input-box">
+                        <label>Age (Years)</label>
+                        <input type="number" id="age" required min="1" max="120" value="45">
+                    </div>
+                    <div class="input-box">
+                        <label>Gender</label>
+                        <select id="gender">
+                            <option value="1">Male</option>
+                            <option value="0">Female</option>
+                        </select>
+                    </div>
+                    <div class="input-box">
+                        <label>Height (cm)</label>
+                        <input type="number" id="height" step="0.1" required value="172">
+                    </div>
+                    <div class="input-box">
+                        <label>Weight (kg)</label>
+                        <input type="number" id="weight" step="0.1" required value="80">
+                    </div>
+                </div>
+
+                <!-- Section 2 -->
+                <div class="section-label">🩺 Clinical Vital Parameters</div>
+                <div class="grid-3">
+                    <div class="input-box">
+                        <label>Systolic BP (mmHg)</label>
+                        <input type="number" id="systolic_bp" required value="142">
+                    </div>
+                    <div class="input-box">
+                        <label>Diastolic BP (mmHg)</label>
+                        <input type="number" id="diastolic_bp" required value="92">
+                    </div>
+                    <div class="input-box">
+                        <label>Fasting Blood Sugar</label>
+                        <select id="glucose">
+                            <option value="1">Normal (&lt; 100 mg/dL)</option>
+                            <option value="2">Above Normal (100-125 mg/dL)</option>
+                            <option value="3">High (&gt; 126 mg/dL)</option>
+                        </select>
+                    </div>
+                    <div class="input-box">
+                        <label>Serum Cholesterol</label>
+                        <select id="cholesterol">
+                            <option value="1">Normal (&lt; 200 mg/dL)</option>
+                            <option value="2" selected>Above Normal (200-239 mg/dL)</option>
+                            <option value="3">High (&gt; 240 mg/dL)</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Section 3 -->
+                <div class="section-label">🌿 Lifestyle & Genetic Risk Indicators</div>
+                <div class="grid-3">
+                    <div class="input-box">
+                        <label>Physical Activity</label>
+                        <select id="physical_activity">
+                            <option value="1">Regular Exercise</option>
+                            <option value="0" selected>Sedentary Lifestyle</option>
+                        </select>
+                    </div>
+                    <div class="input-box">
+                        <label>Smoking Status</label>
+                        <select id="smoking">
+                            <option value="0">Non-Smoker</option>
+                            <option value="1" selected>Active Smoker</option>
+                        </select>
+                    </div>
+                    <div class="input-box">
+                        <label>Alcohol Intake</label>
+                        <select id="alcohol">
+                            <option value="0">No / Occasional</option>
+                            <option value="1">Regular</option>
+                        </select>
+                    </div>
+                    <div class="input-box">
+                        <label>Daily Sleep Duration: <span id="sleepDisp" style="color:#60a5fa; font-weight:bold;">6 hrs</span></label>
+                        <input type="range" id="sleep_hours" min="3" max="12" value="6" oninput="document.getElementById('sleepDisp').innerText = this.value + ' hrs'">
+                    </div>
+                    <div class="input-box">
+                        <label>Family History of Cardiac Issues</label>
+                        <select id="family_history">
+                            <option value="0">No</option>
+                            <option value="1" selected>Yes</option>
+                        </select>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn-analyze">🔍 Run AI Risk Prediction</button>
+            </form>
+
+            <!-- Result Panel -->
+            <div id="resultPanel" class="result-panel">
+                <div class="result-header-flex">
+                    <div>
+                        <h2 style="font-size:1.3rem;">Diagnostic Screening Summary</h2>
+                        <p style="color:var(--text-secondary); font-size:0.875rem;">Model: Random Forest Classifier (Accuracy: 93.1%)</p>
+                    </div>
+                    <div id="statusChip" class="status-chip">Analyzing...</div>
+                </div>
+
+                <div class="progress-container">
+                    <div class="progress-info">
+                        <span>Predicted Risk Index</span>
+                        <span id="riskPctText">0%</span>
+                    </div>
+                    <div class="progress-bar-bg">
+                        <div id="progressBar" class="progress-bar-fill"></div>
+                    </div>
+                </div>
+
+                <div class="grid-3" style="margin-top:1.5rem; margin-bottom:0;">
+                    <div class="input-box" style="background:rgba(15,23,42,0.6); padding:1rem; border-radius:12px; border:1px solid var(--card-border);">
+                        <span style="font-size:0.8rem; color:var(--text-secondary);">Calculated BMI</span>
+                        <span id="bmiVal" style="font-size:1.5rem; font-weight:800; color:#fff;">--</span>
+                    </div>
+                    <div class="input-box" style="background:rgba(15,23,42,0.6); padding:1rem; border-radius:12px; border:1px solid var(--card-border);">
+                        <span style="font-size:0.8rem; color:var(--text-secondary);">Pulse Pressure</span>
+                        <span id="pulseVal" style="font-size:1.5rem; font-weight:800; color:#fff;">--</span>
+                    </div>
+                </div>
+
+                <div id="recommendationBox" class="recommendations-card">
+                    <h4>💡 Clinical Recommendations</h4>
+                    <ul id="recommendationList">
+                        <li>Assessment result loading...</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('assessmentForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const sys = parseInt(document.getElementById('systolic_bp').value);
+            const dia = parseInt(document.getElementById('diastolic_bp').value);
+
+            const payload = {
+                user_id: 1,
+                age: parseInt(document.getElementById('age').value),
+                gender: parseInt(document.getElementById('gender').value),
+                height: parseFloat(document.getElementById('height').value),
+                weight: parseFloat(document.getElementById('weight').value),
+                systolic_bp: sys,
+                diastolic_bp: dia,
+                glucose: parseInt(document.getElementById('glucose').value),
+                cholesterol: parseInt(document.getElementById('cholesterol').value),
+                physical_activity: parseInt(document.getElementById('physical_activity').value),
+                smoking: parseInt(document.getElementById('smoking').value),
+                alcohol: parseInt(document.getElementById('alcohol').value),
+                sleep_hours: parseInt(document.getElementById('sleep_hours').value),
+                family_history: parseInt(document.getElementById('family_history').value)
+            };
+
+            try {
+                const response = await fetch('http://127.0.0.1:8000/predict', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+
+                const data = await response.json();
+                const panel = document.getElementById('resultPanel');
+                const chip = document.getElementById('statusChip');
+                const pBar = document.getElementById('progressBar');
+                const recoList = document.getElementById('recommendationList');
+
+                panel.style.display = 'block';
+
+                const scorePct = data.risk_score_percentage;
+                document.getElementById('riskPctText').innerText = `${scorePct}%`;
+                document.getElementById('bmiVal').innerText = `${data.bmi}`;
+                document.getElementById('pulseVal').innerText = `${sys - dia} mmHg`;
+
+                pBar.style.width = `${scorePct}%`;
+
+                if (data.prediction === 1) {
+                    panel.style.background = 'rgba(239, 68, 68, 0.05)';
+                    chip.className = 'status-chip chip-high';
+                    chip.innerText = 'HIGH HEALTH RISK';
+                    pBar.style.background = 'linear-gradient(90deg, #f97316, #ef4444)';
+
+                    recoList.innerHTML = `
+                        <li>High blood pressure / cholesterol detected. Consult a physician for a full cardiac evaluation.</li>
+                        <li>Consider regular aerobic exercise (30 mins/day) and sodium reduction in diet.</li>
+                        <li>Smoking cessation and monitoring blood glucose levels regularly is strongly recommended.</li>
+                    `;
+                } else {
+                    panel.style.background = 'rgba(16, 185, 129, 0.05)';
+                    chip.className = 'status-chip chip-low';
+                    chip.innerText = 'LOW HEALTH RISK';
+                    pBar.style.background = 'linear-gradient(90deg, #3b82f6, #10b981)';
+
+                    recoList.innerHTML = `
+                        <li>Patient parameters fall within normal screening thresholds.</li>
+                        <li>Maintain a balanced diet, regular physical activity, and adequate sleep (7-8 hours).</li>
+                        <li>Schedule routine annual health checkups to monitor long-term vitals.</li>
+                    `;
+                }
+
+                panel.scrollIntoView({ behavior: 'smooth' });
+
+            } catch (err) {
+                alert('Backend connection error! Make sure uvicorn server is running.');
+            }
+        });
+    </script>
+</body>
+</html>
